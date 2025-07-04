@@ -16,6 +16,7 @@ const state  = {
     filter: Filters.All,
 }
 
+
 const initStore = () =>{
     console.log(state);
     console.log('initializing store 🥑');
