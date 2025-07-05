@@ -6,8 +6,8 @@ const Filters = {
     Pending: 'Pending',
 }
 
-const state  = {
-    todos : [
+const state = {
+    todos: [
         new Todo('Piedra del alma'),
         new Todo('Piedra del infinito'),
         new Todo('Piedra del tiempo'),
@@ -17,43 +17,60 @@ const state  = {
 }
 
 
-const initStore = () =>{
+const initStore = () => {
     console.log(state);
     console.log('initializing store 🥑');
 }
 
-const loadStore = () =>{
+const loadStore = () => {
+    throw new Error('Not Implemented ❌');
+    a
+}
+const getTodos = (filter = Filters.All) => {
+    switch (filter) {
+        case Filters.All:
+            return [...state.todos];
+        case Filters.Completed:
+            return state.todos.filter(todo => todo.done);
+        case Filters.Pending:
+            return state.todo.filter(todo => !todo.done);
+        default:
+            throw new Error(`Option ${filter} is not valid`);
+    }
+}
+
+const addTodo = (description) => {
+    if (!description) {
+        throw new Error(`Description is required`)
+    }
+    state.todos.push(new Todo(description));
+}
+
+const toggleTodo = (todoId) => {
     throw new Error('Not Implemented ❌');
 }
 
-const addTodo = ( description ) => {
-    throw new Error('Not Implemented ❌');
-}
-
-const toggleTodo = ( todoId ) => {
-    throw new Error('Not Implemented ❌');
-}
-
-const deleteTodo = ( todoId ) => {
-    throw new Error('Not Implemented ❌');
+const deleteTodo = (todoId) => {
+    state.todos = state.todos.filter(todo => todo.id !== todoId);
 }
 
 const deleteCompleted = () => {
-    throw new Error('Not Implemented ❌');
+    state.todos = state.todos.filter(todo => todo.done);
 }
 
-const setFilter = ( newFilter = Filters.All) => {
-    throw new Error('Not Implemented ❌');
+const setFilter = (newFilter = Filters.All) => {
+    state.filter = newFilter;
 }
 
 const getCurrentFilter = () => {
-    throw new Error('Not Implemented ❌');
+    return state.filter;
 }
 
 
 export default {
     initStore,
     loadStore,
+    getTodos,
     addTodo,
     toggleTodo,
     deleteTodo,
