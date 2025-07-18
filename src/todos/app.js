@@ -1,26 +1,33 @@
 import html from './app.html?raw'
 import todoStore, {Filters} from "../store/todo.store.js";
 import {renderTodos} from "./use-cases/render-todos.js";
+import {renderPending} from "./use-cases/index.js";
 
 const ElementsIDs = {
     ClearCompleted : '.clear-completed',
     TodoList: '.todo-list',
     NewTodoInput : '#new-todo-input',
     TodoFilters : '.filtro',
+    PendingCountLabel: '#pending-count',
 }
 
 export const App = (elementId) => {
 
     const displayTodos = () => {
         const todos = todoStore.getTodos( todoStore.getCurrentFilter() );
-        renderTodos( ElementsIDs.TodoList , todos )
+        renderTodos( ElementsIDs.TodoList , todos );
+        updatePendingCount();
+    }
+
+    const updatePendingCount = ()=> {
+    renderPending(  ElementsIDs.PendingCountLabel );
     }
 
     (()=> {
         const app = document.createElement('div');
         app.innerHTML = html;
         document.querySelector(elementId).append(app);
-        displayTodos()
+        displayTodos();
     })();
 
     //Referencias HTML
