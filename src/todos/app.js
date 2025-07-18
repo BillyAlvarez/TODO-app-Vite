@@ -4,6 +4,7 @@ import {renderTodos} from "./use-cases/render-todos.js";
 
 const ElementsIDs = {
     TodoList: '.todo-list',
+    NewTodoInput : '#new-todo-input',
 }
 
 export const App = (elementId) => {
@@ -19,5 +20,20 @@ export const App = (elementId) => {
         document.querySelector(elementId).append(app);
         displayTodos()
     })();
+
+    //Referencias HTML
+    const newDescriptionInput = document.querySelector(ElementsIDs.NewTodoInput);
+
+    // Listeners
+
+    newDescriptionInput.addEventListener('keyup', (e) => {
+        if ( e.keyCode !== 13 ) return;
+        if ( e.target.value.trim().length === 0 ) return;
+
+        todoStore.addTodo( e.target.value );
+        displayTodos();
+        e.target.value = '';
+
+    });
 
 }

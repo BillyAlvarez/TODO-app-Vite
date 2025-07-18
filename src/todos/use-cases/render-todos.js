@@ -1,8 +1,16 @@
 import {createTodoHtml} from "./create-todo-html.js";
 
+let element;
 export const renderTodos = ( elementId , todos = []) => {
 
-    const element = document.querySelector(elementId);
+    if (!element) {
+         element = document.querySelector(elementId);
+    }
+    if (!element) {
+        throw new Error("No element with id " + elementId);
+    }
+
+    element.innerHTML = '';
 
     todos.forEach( todo => {
        element.append( createTodoHtml( todo ))
