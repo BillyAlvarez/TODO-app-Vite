@@ -1,10 +1,12 @@
 import html from './app.html?raw'
-import todoStore from "../store/todo.store.js";
+import todoStore, {Filters} from "../store/todo.store.js";
 import {renderTodos} from "./use-cases/render-todos.js";
 
 const ElementsIDs = {
+    ClearCompleted : '.clear-completed',
     TodoList: '.todo-list',
     NewTodoInput : '#new-todo-input',
+    TodoFilters : '.filtro',
 }
 
 export const App = (elementId) => {
@@ -22,7 +24,10 @@ export const App = (elementId) => {
     })();
 
     //Referencias HTML
-    const newDescriptionInput = document.querySelector(ElementsIDs.NewTodoInput);
+    const newDescriptionInput = document.querySelector( ElementsIDs.NewTodoInput );
+    const todoListUL = document.querySelector( ElementsIDs.TodoList );
+    const clearCompletedButton = document.querySelector( ElementsIDs.ClearCompleted);
+    const filterLIs = document.querySelectorAll( ElementsIDs.TodoFilters );
 
     // Listeners
 
@@ -33,7 +38,49 @@ export const App = (elementId) => {
         todoStore.addTodo( e.target.value );
         displayTodos();
         e.target.value = '';
+    });
+
+    todoListUL.addEventListener('click', (e) => {
+        const element = e.target.closest( '[data-id]');
+        todoStore.toggleTodo( element.getAttribute( 'data-id'));
+        displayTodos();
+    })
+
+    todoListUL.addEventListener('click', (e) => {
+        const isDestroyElement = e.target.className === 'destroy';
+        const element = e.target.closest( '[data-id]');
+        if ( !element || !isDestroyElement ) return;
+
+        todoStore.deleteTodo( element.getAttribute( 'data-id'));
+        displayTodos();
+    })
+
+    clearCompletedButton.addEventListener('click', (e) => {
+
+        todoStore.deleteCompleted();
+        displayTodos();
+    })
+
+    filterLIs.forEach( element => {
+
+        element.addEventListener('click', (element) => {
+            filterLIs.forEach( el => el.classList.remove('selected'));
+            element.target.classList.add('selected');
+            switch ( element.target.text){
+                case 'Todos':
+                    todoStore.setFilter( Filters.All)
+                    break;
+                case 'Pendientes':
+                    todoStore.setFilter( Filters.Pending)
+                    break;
+                case 'Completados':
+                    todoStore.setFilter( Filters.Completed)
+                    break;
+            }
+            displayTodos();
+        });
 
     });
+
 
 }
